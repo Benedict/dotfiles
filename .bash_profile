@@ -13,7 +13,8 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # Custom $PATH with extra locations.
-export PATH=/usr/local/opt/python/libexec/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:/usr/local/git/bin:$HOME/.composer/vendor/bin:$PATH
+export PYTHONPATH=/usr/local/opt/python/libexec/bin
+export PATH=$HOME/.gem/ruby/2.3.0/bin:$PYTHONPATH:/usr/local/bin:/usr/local/sbin:$HOME/bin:/usr/local/git/bin:$HOME/.composer/vendor/bin:$PATH
 
 # Include alias file (if present) containing aliases for ssh, etc.
 if [ -f ~/.bash_aliases ]
@@ -82,66 +83,8 @@ export PATH="$brew_prefix/opt/php70/bin:$PATH"
 # fi
 
 # Python settings.
-export PYTHONPATH="/usr/local/lib/python2.7/site-packages"
-
-# Super useful Docker container oneshots.
-# Usage: dockrun, or dockrun [centos7|fedora27|debian9|debian8|ubuntu1404|etc.]
-dockrun() {
-  docker run -it geerlingguy/docker-"${1:-ubuntu1604}"-ansible /bin/bash
-}
-
-# Enter a running Docker container.
-function denter() {
-  if [[ ! "$1" ]] ; then
-      echo "You must supply a container ID or name."
-      return 0
-  fi
-
-  docker exec -it $1 bash
-  return 0
-}
-
-# Docker image visualization (usage: `dockviz images -t`).
-alias dockviz="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
-
-# Delete a given line number in the known_hosts file.
-knownrm() {
-  re='^[0-9]+$'
-  if ! [[ $1 =~ $re ]] ; then
-    echo "error: line number missing" >&2;
-  else
-    sed -i '' "$1d" ~/.ssh/known_hosts
-  fi
-}
-
-# Ask for confirmation when 'prod' is in a command string.
-prod_command_trap () {
-  if [[ $BASH_COMMAND == *prod* ]]
-  then
-    read -p "Are you sure you want to run this command on prod [Y/n]? " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-      echo -e "\nRunning command \"$BASH_COMMAND\" \n"
-    else
-      echo -e "\nCommand was not run.\n"
-      return 1
-    fi
-  fi
-}
-shopt -s extdebug
-trap prod_command_trap DEBUG
-
-function blt() {
-  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
-    GIT_ROOT=$(git rev-parse --show-cdup)
-  else
-    GIT_ROOT="."
-  fi
-
-  if [ -f "$GIT_ROOT/vendor/bin/blt" ]; then
-    $GIT_ROOT/vendor/bin/blt "$@"
-  else
-    echo "You must run this command from within a BLT-generated project repository."
-    return 1
-  fi
-}
+export VIRTUALENVWRAPPER_PYTHON=$PYTHONPATH
+if [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
+  source /usr/local/bin/virtualenvwrapper.sh
+fi
+export WORKON_HOME=$HOME/.virtualenvs

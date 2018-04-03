@@ -1,6 +1,6 @@
 [user]
-  name = Jeff Geerling
-  email = geerlingguy@mac.com
+  name = Benedict Steele
+  email = ben@hyperdimensional.net
 [core]
   editor = vi
   excludesfile = ~/.gitignore
