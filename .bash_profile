@@ -83,8 +83,14 @@ export PATH="$brew_prefix/opt/php70/bin:$PATH"
 # fi
 
 # Python settings.
-export VIRTUALENVWRAPPER_PYTHON=$PYTHONPATH
+export VIRTUALENVWRAPPER_PYTHON=$PYTHONPATH/python
 if [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
   source /usr/local/bin/virtualenvwrapper.sh
 fi
 export WORKON_HOME=$HOME/.virtualenvs
+
+# Lunchy settings
+LUNCHY_DIR=$(dirname `gem which lunchy`)/../extras
+if [ -f $LUNCHY_DIR/lunchy-completion.bash ]; then
+  . $LUNCHY_DIR/lunchy-completion.bash
+fi
